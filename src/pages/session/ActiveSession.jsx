@@ -21,7 +21,18 @@ export default function ActiveSession({
   const socketRef = useRef(null);
 
   useEffect(() => {
-    const socket = io(process.env.REACT_APP_BASE_URL);
+    const socket = io(process.env.REACT_APP_SOCKET_URL, {
+      path: '/socket.io/',
+      transports: ['websocket', 'polling'], // Allow fallback to polling
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      withCredentials: true,
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
+    });
+
     socketRef.current = socket;
 
     socket.on('connect', () => {

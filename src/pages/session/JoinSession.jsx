@@ -31,7 +31,16 @@ export default function JoinSession({ setMode, setActiveSession }) {
 
   useEffect(() => {
     // Connect socket when component mounts
-    const socket = io(process.env.REACT_APP_BASE_URL);
+
+    // console.log('Connecting to Socket.io at:', process.env.REACT_APP_BASE_URL);
+
+    const socket = io(process.env.REACT_APP_SOCKET_URL, {
+      // Allow polling fallback
+      transports: ['websocket', 'polling'],
+      withCredentials: true,
+      path: '/socket.io/',
+    });
+
     socketRef.current = socket;
 
     socket.on('connect', () => {
@@ -54,6 +63,10 @@ export default function JoinSession({ setMode, setActiveSession }) {
       console.log(token === data.token);
 
       if (token === data.token) setMode('active-session');
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
     });
 
     return () => {
