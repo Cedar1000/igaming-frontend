@@ -1,0 +1,43 @@
+.leaderboard-wrapper {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .leaderboard-header {
+    margin-bottom: 1rem;
+  }
+  
+  .back-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .leaderboard-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .rank {
+    font-weight: bold;
+  }
+  
+  .username {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .wins {
+    color: green;
+  }
+  
