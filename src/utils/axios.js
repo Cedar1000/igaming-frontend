@@ -5,6 +5,7 @@ const request = () => {
   const headers = token === null ? {} : { Authorization: `Bearer ${token}` };
 
   const baseURL = process.env.REACT_APP_BASE_URL;
+  console.log({ baseURL });
 
   return axios.create({
     baseURL,

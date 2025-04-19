@@ -13,7 +13,7 @@ export default function ActiveSession({
   setTotalWins,
   setWinners,
 }) {
-  const { user } = useContext(AuthContext);
+  const { user, getMe } = useContext(AuthContext);
   const [timeLeft, setTimeLeft] = useState(60);
   const [number, setNumber] = useState('');
 
@@ -40,6 +40,7 @@ export default function ActiveSession({
     });
 
     socket.on('number-picked', (data) => {
+      console.log('Number picked:', data);
       setIsLoading(false);
       setSession(data.session);
     });
@@ -48,13 +49,16 @@ export default function ActiveSession({
       setSession(data.session);
     });
 
-    socket.on('new-session', (data) => {
+    socket.on('new-session', async (data) => {
       console.log('Session has ended', data);
       setCorrectNumber(data.result);
       setTotalPlayers(data.totalPlayers);
       setTotalWins(data.winners.length);
       setWinners(data.winners);
       setSession(data.newSession);
+
+      //  Re-fetch user data
+      await getMe();
       setMode('result');
     });
 
@@ -106,8 +110,10 @@ export default function ActiveSession({
     setIsLoading(true);
     if (!number || !socketRef.current) return;
 
+    const token = localStorage.getItem('token');
+
     socketRef.current.emit('number-pick', {
-      userId: user.id,
+      token,
       sessionId: session.id,
       number,
     });
